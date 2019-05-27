@@ -35,7 +35,7 @@ public interface InterfaceApi {
 
     @POST("productwise_report")
     @FormUrlEncoded
-    Call<ProductModel> productwise_report(@Field("KEY") String APIKEY
+    Call<ProductModel> productwise_report(@Field("KEY") String APIKEY,@Field("search") String search
 
     );
 

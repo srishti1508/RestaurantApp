@@ -101,8 +101,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         albumList.add(a);
         a= new Album("Product Report", 14, covers[4]);
         albumList.add(a);
-        a= new Album("Menu", 14, covers[5]);
-        albumList.add(a);
        /* a = new Album("Events.", 14, covers[8]);
         albumList.add(a);*/
         adapter.notifyDataSetChanged();

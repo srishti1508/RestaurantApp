@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,44 +29,58 @@ import retrofit2.Response;
 import tgs.com.restaurantapp.retrofit.ApiClient;
 import tgs.com.restaurantapp.retrofit.InterfaceApi;
 
-public class Customer extends Fragment {
+public class ProductSearchedReport extends Fragment {
     RecyclerView recyclerView;
-    ProgressBar progressBar;
+   ProgressBar progressBar;
     Button manageprofile, fee_structure, change_pwd;
-    ImageView pro_pic;
+    ImageView rightimage;
     TextView name, enroll_no;
     TableAdapter tableAdapter;
+    String item="";
     private List<TableModel> albumList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_customer, container, false);
+        View view = inflater.inflate(R.layout.activity_product, container, false);
 
         recyclerView=view.findViewById(R.id.recycler_view);
+        rightimage=view.findViewById(R.id.rightimage);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
-
         progressBar = (ProgressBar)view.findViewById(R.id.progress);
         Sprite doubleBounce = new Wave();
         progressBar.setIndeterminateDrawable(doubleBounce);
-        getServiceResponseData();
+        Bundle bundle=getArguments();
+        item=bundle.getString("Item");
+        getServiceResponseData(item);
+
+        rightimage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProductSearchingReport fragment = new ProductSearchingReport();
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.frag_container, fragment);
+                ft.commit();
+            }
+        });
 
         return view;
     }
 
 
-    private void getServiceResponseData() {
+    private void getServiceResponseData(String Item) {
 
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
-        Call<CustomerModel> call = api.customer_report("5199");
-        call.enqueue(new Callback<CustomerModel>() {
+        Call<ProductModel> call = api.productwise_report("5199",Item);
+        call.enqueue(new Callback<ProductModel>() {
             @Override
-            public void onResponse(Call<CustomerModel> call, Response<CustomerModel> response) {
-             progressBar.setVisibility(View.GONE);
-             recyclerView.setVisibility(View.VISIBLE);
-                final CustomerModel status = response.body();
+            public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
+              progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                final ProductModel status = response.body();
 
                 if (status.getStatus().equals("1")) {
 
@@ -77,7 +93,7 @@ public class Customer extends Fragment {
                 }
             }
             @Override
-            public void onFailure(Call<CustomerModel> call, Throwable t) {
+            public void onFailure(Call<ProductModel> call, Throwable t) {
 
                 Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
@@ -86,40 +102,33 @@ public class Customer extends Fragment {
         });
     }
 
+
+
     private class TableAdapter extends RecyclerView.Adapter<TableAdapter.MyViewHolder>  {
         private Context mContext;
-        private List<CustomerModel.Response> albumList;
-        public TableAdapter(Context mContext,CustomerModel albumList) {
+        private List<ProductModel.Response> albumList;
+        public TableAdapter(Context mContext,ProductModel albumList) {
             this.mContext = mContext;
             this.albumList = albumList.getResponse();
         }
         @Override
         public TableAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.customer_single, parent, false);
+                    .inflate(R.layout.product_single, parent, false);
             return new TableAdapter.MyViewHolder(itemView);
         }
 
         @Override
         public void onBindViewHolder(@NonNull final TableAdapter.MyViewHolder holder, int position) {
-            final CustomerModel.Response table = albumList.get(position);
+            final ProductModel.Response table = albumList.get(position);
 
-            holder.CustomerName.setText(table.getName());
-            holder.Mobile.setText(table.getPhone());
-            holder.Email.setText(table.getEmail());
-            holder.Discount.setText(table.getDiscount());
-            holder.Date.setText(table.getCreated_at());
+            holder.ProductName.setText(table.getPro_name());
+            holder.Category.setText(table.getPro_category());
+            holder.Quantity.setText(table.getPro_quantity());
+            holder.Rate.setText(table.getPro_price());
+            holder.Cost.setText(table.getPro_total());
 
 
-            /*holder.Table.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    holder.textnum.setBackgroundColor(Color.parseColor("#ef0202"));
-                    holder.textnum.setTextColor(Color.parseColor("#fcfbfb"));
-                    Toast.makeText(getActivity(), "Table "+" is Booked" ,Toast.LENGTH_SHORT).show();
-                }
-            });*/
         }
 
         @Override
@@ -130,15 +139,15 @@ public class Customer extends Fragment {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
-            TextView CustomerName,Mobile,Email,Discount,Date;
+            TextView ProductName,Category,Quantity,Rate,Cost;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
 
-                CustomerName=itemView.findViewById(R.id.CustomerName);
-                Mobile=itemView.findViewById(R.id.Mobile);
-                Email=itemView.findViewById(R.id.Email);
-                Discount=itemView.findViewById(R.id.Discount);
-                Date=itemView.findViewById(R.id.Date);
+                ProductName=itemView.findViewById(R.id.ProductName);
+                Category=itemView.findViewById(R.id.Category);
+                Quantity=itemView.findViewById(R.id.Quantity);
+                Rate=itemView.findViewById(R.id.Rate);
+                Cost=itemView.findViewById(R.id.Cost);
             }
         }
     }

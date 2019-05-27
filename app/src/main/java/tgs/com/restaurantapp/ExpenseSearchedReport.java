@@ -1,11 +1,8 @@
 package tgs.com.restaurantapp;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,13 +12,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -33,7 +26,6 @@ import com.github.ybq.android.spinkit.style.Circle;
 import com.github.ybq.android.spinkit.style.RotatingCircle;
 import com.github.ybq.android.spinkit.style.Wave;
 
-import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -42,9 +34,9 @@ import retrofit2.Response;
 import tgs.com.restaurantapp.retrofit.ApiClient;
 import tgs.com.restaurantapp.retrofit.InterfaceApi;
 
-public class ExpenseReport extends Fragment {
+public class ExpenseSearchedReport extends Fragment {
     RecyclerView recyclerView;
-    ProgressBar progressBar;
+  ProgressBar progressBar;
     Button manageprofile, fee_structure, change_pwd;
     ImageView rightimage;
     TextView name, activityName;
@@ -73,6 +65,8 @@ public class ExpenseReport extends Fragment {
         Sprite doubleBounce = new Wave();
         progressBar.setIndeterminateDrawable(doubleBounce);
 
+        Bundle bundle=getArguments();
+        date=bundle.getString("Date");
         //setHasOptionsMenu(true);
         getServiceResponseData(date);
         rightimage.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +83,6 @@ public class ExpenseReport extends Fragment {
 
         return view;
     }
-
    /* @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -108,24 +101,19 @@ public class ExpenseReport extends Fragment {
     }*/
 
 
+
     private void getServiceResponseData(String Date) {
-    progressBar.setVisibility(View.VISIBLE);
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
         Call<ExpenseModel> call = api.expense_report("5199",Date);
         call.enqueue(new Callback<ExpenseModel>() {
             @Override
             public void onResponse(Call<ExpenseModel> call, Response<ExpenseModel> response) {
-            progressBar.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
                 final ExpenseModel status = response.body();
 
                 if (status.getStatus().equals("1")) {
-                    if(status.getTotal_expense().equals("")){
-                        activityName.setText("Total Expense : 0");
-                    }else {
-                        activityName.setText("Total Expense : " + status.getTotal_expense());
-                    }
+                    activityName.setText("Total Expense : " +status.getTotal_expense());
                     tableAdapter = new TableAdapter(getActivity(),status);
                     recyclerView.setAdapter(tableAdapter);
 
@@ -169,7 +157,6 @@ public class ExpenseReport extends Fragment {
             holder.attachment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     Attachment fragment = new Attachment();
                     Bundle args = new Bundle();
                     args.putString("url",table.getAttachment_url());
@@ -204,5 +191,6 @@ public class ExpenseReport extends Fragment {
             }
         }
     }
+
 
 }

@@ -13,8 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.github.ybq.android.spinkit.style.FadingCircle;
+import com.github.ybq.android.spinkit.style.WanderingCubes;
+import com.github.ybq.android.spinkit.style.Wave;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +34,8 @@ import tgs.com.restaurantapp.retrofit.InterfaceApi;
 
 public class Table extends Fragment {
     RecyclerView recyclerView;
-    private ProgressDialog pDialog;
+
+    ProgressBar progressBar;
     Button manageprofile, fee_structure, change_pwd;
     ImageView pro_pic;
     TextView name, enroll_no;
@@ -43,33 +51,30 @@ public class Table extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(mLayoutManager);
+
+        progressBar = (ProgressBar)view.findViewById(R.id.progress);
+        Sprite doubleBounce = new Wave();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+
         getServiceResponseData();
-/*
-        albumList = new ArrayList<>();
-        albumList.add(new TableModel("1"));
-        albumList.add(new TableModel("2"));
-        albumList.add(new TableModel("3"));
-        albumList.add(new TableModel("4"));
-        albumList.add(new TableModel("5"));
-        albumList.add(new TableModel("6"));
-        albumList.add(new TableModel("7"));
-        albumList.add(new TableModel("8"));
-        albumList.add(new TableModel("9"));
-        albumList.add(new TableModel("10"));
-        albumList.add(new TableModel("11"));
-        albumList.add(new TableModel("12"));*/
 
         return view;
     }
 
 
-    private void getServiceResponseData() {
 
+
+    private void getServiceResponseData() {
+        progressBar.setVisibility(View.VISIBLE);
+       // CustomProgressDialouge.showProgressBar(getActivity(), false);
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
         Call<TableModel> call = api.tablestatus_report("5199");
         call.enqueue(new Callback<TableModel>() {
             @Override
             public void onResponse(Call<TableModel> call, Response<TableModel> response) {
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                //CustomProgressDialouge.hideProgressBar();
                 final TableModel status = response.body();
 
                 if (status.getStatus().equals("1")) {
@@ -84,7 +89,8 @@ public class Table extends Fragment {
             }
             @Override
             public void onFailure(Call<TableModel> call, Throwable t) {
-
+                progressBar.setVisibility(View.GONE);
+               // CustomProgressDialouge.hideProgressBar();
                 Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
 

@@ -35,7 +35,7 @@ public class Dashboard_Main extends AppCompatActivity {
             case 0:
                 return new ExpenseReport();
             case 1:
-                return new SalesReport();
+                return new SaleReport();
             case 2:
                 return new Customer();
             case 3:
