@@ -1,17 +1,12 @@
 package tgs.com.restaurantapp;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
-import android.print.PrintManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -26,7 +21,7 @@ public class Attachment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.webview_activity, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
 
@@ -51,7 +46,6 @@ public class Attachment extends Fragment {
         //webView.getSettings().setAllowFileAccess(true);
         webView.getSettings().setUseWideViewPort(true);
         //webView.getSettings().setDisplayZoomControls(true);
-
         // webView.getSettings().setBuiltInZoomControls(true);
         initview();
         setHasOptionsMenu(true);
@@ -61,15 +55,12 @@ public class Attachment extends Fragment {
     private void initview() {
         initProgressDialog();
         stopProgressDialog();
-        //  getServiceResponseData();
     }
-
     private void initProgressDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
         pDialog.setCancelable(true);
     }
-
     private void stopProgressDialog() {
         if (pDialog.isShowing()) {
             pDialog.dismiss();

@@ -13,13 +13,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class ExpenseDateReport extends Fragment {
-
     EditText date;
     Button Search;
     int mYear, mMonth, mDay;
@@ -51,7 +49,6 @@ public class ExpenseDateReport extends Fragment {
                     }
                 }, mYear, mMonth, mDay);
                 mDatePicker.getDatePicker().setCalendarViewShown(false);
-
                 mDatePicker.show();
             }
         });
@@ -66,6 +63,8 @@ public class ExpenseDateReport extends Fragment {
                 fragment.setArguments(args);
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
+                ft.setCustomAnimations(R.animator.fade_in,
+                        R.animator.fade_out);
                 ft.replace(R.id.frag_container, fragment);
                 ft.commit();
             }

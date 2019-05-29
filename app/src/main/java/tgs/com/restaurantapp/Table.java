@@ -1,8 +1,7 @@
 package tgs.com.restaurantapp;
 
-import android.app.ProgressDialog;
+
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,21 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.DoubleBounce;
-import com.github.ybq.android.spinkit.style.FadingCircle;
-import com.github.ybq.android.spinkit.style.WanderingCubes;
 import com.github.ybq.android.spinkit.style.Wave;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,13 +25,9 @@ import tgs.com.restaurantapp.retrofit.InterfaceApi;
 
 public class Table extends Fragment {
     RecyclerView recyclerView;
-
     ProgressBar progressBar;
-    Button manageprofile, fee_structure, change_pwd;
-    ImageView pro_pic;
-    TextView name, enroll_no;
+    TextView name;
     TableAdapter tableAdapter;
-    private List<TableModel> albumList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,22 +38,14 @@ public class Table extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(mLayoutManager);
-
         progressBar = (ProgressBar)view.findViewById(R.id.progress);
         Sprite doubleBounce = new Wave();
         progressBar.setIndeterminateDrawable(doubleBounce);
-
         getServiceResponseData();
-
         return view;
     }
-
-
-
-
     private void getServiceResponseData() {
         progressBar.setVisibility(View.VISIBLE);
-       // CustomProgressDialouge.showProgressBar(getActivity(), false);
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
         Call<TableModel> call = api.tablestatus_report("5199");
         call.enqueue(new Callback<TableModel>() {
@@ -74,7 +53,6 @@ public class Table extends Fragment {
             public void onResponse(Call<TableModel> call, Response<TableModel> response) {
                 progressBar.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
-                //CustomProgressDialouge.hideProgressBar();
                 final TableModel status = response.body();
 
                 if (status.getStatus().equals("1")) {
@@ -90,16 +68,12 @@ public class Table extends Fragment {
             @Override
             public void onFailure(Call<TableModel> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
-               // CustomProgressDialouge.hideProgressBar();
                 Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
 
             }
         });
     }
-
-
-
     private class TableAdapter extends RecyclerView.Adapter<TableAdapter.MyViewHolder>  {
         private Context mContext;
         private List<TableModel.Response> albumList;
@@ -113,7 +87,6 @@ public class Table extends Fragment {
                     .inflate(R.layout.table_single, parent, false);
             return new TableAdapter.MyViewHolder(itemView);
         }
-
         @Override
         public void onBindViewHolder(@NonNull final TableAdapter.MyViewHolder holder, int position) {
             final TableModel.Response table = albumList.get(position);
@@ -135,15 +108,12 @@ public class Table extends Fragment {
                 }
             });*/
         }
-
         @Override
         public int getItemCount() {
-
             return albumList.size();
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-
             ImageView Table;
             TextView textnum,texttime;
             public MyViewHolder(@NonNull View itemView) {

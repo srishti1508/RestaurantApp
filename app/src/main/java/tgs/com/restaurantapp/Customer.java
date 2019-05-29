@@ -1,6 +1,5 @@
 package tgs.com.restaurantapp;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,17 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.Wave;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,11 +24,8 @@ import tgs.com.restaurantapp.retrofit.InterfaceApi;
 public class Customer extends Fragment {
     RecyclerView recyclerView;
     ProgressBar progressBar;
-    Button manageprofile, fee_structure, change_pwd;
-    ImageView pro_pic;
-    TextView name, enroll_no;
+    TextView name;
     TableAdapter tableAdapter;
-    private List<TableModel> albumList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,18 +36,14 @@ public class Customer extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
-
-        progressBar = (ProgressBar)view.findViewById(R.id.progress);
+        progressBar = view.findViewById(R.id.progress);
         Sprite doubleBounce = new Wave();
         progressBar.setIndeterminateDrawable(doubleBounce);
         getServiceResponseData();
-
         return view;
     }
 
-
     private void getServiceResponseData() {
-
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
         Call<CustomerModel> call = api.customer_report("5199");
         call.enqueue(new Callback<CustomerModel>() {
@@ -65,23 +52,17 @@ public class Customer extends Fragment {
              progressBar.setVisibility(View.GONE);
              recyclerView.setVisibility(View.VISIBLE);
                 final CustomerModel status = response.body();
-
                 if (status.getStatus().equals("1")) {
-
                     tableAdapter = new TableAdapter(getActivity(),status);
                     recyclerView.setAdapter(tableAdapter);
-
                 } else {
-
                     Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onFailure(Call<CustomerModel> call, Throwable t) {
-
                 Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
-
             }
         });
     }
@@ -109,27 +90,14 @@ public class Customer extends Fragment {
             holder.Email.setText(table.getEmail());
             holder.Discount.setText(table.getDiscount());
             holder.Date.setText(table.getCreated_at());
-
-
-            /*holder.Table.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    holder.textnum.setBackgroundColor(Color.parseColor("#ef0202"));
-                    holder.textnum.setTextColor(Color.parseColor("#fcfbfb"));
-                    Toast.makeText(getActivity(), "Table "+" is Booked" ,Toast.LENGTH_SHORT).show();
-                }
-            });*/
         }
 
         @Override
         public int getItemCount() {
-
             return albumList.size();
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-
             TextView CustomerName,Mobile,Email,Discount,Date;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);

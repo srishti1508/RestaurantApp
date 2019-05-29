@@ -1,12 +1,16 @@
 package tgs.com.restaurantapp;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -32,18 +36,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Toolbar toolbar;
     TextView marquee, notice;
     private SliderLayout mDemoSlider;
-    public static String user_name;
-    public static String user_id;
-    public static String type;
-    public static String user_main_id;
-    public static String stu_cource_id;
-    public static String stu_branch_id;
-    public static String stu_sem_id;
-    public static String stu_section;
-    public static String stu_session_year;
-    public static String user_logged_type;
     private List<Album> albumList;
     private AlbumAdapter adapter;
+    SharedPreferences settings;
+    Shared_Common_Pref shared_common_pref;
+    public static String user_group_name;
+    public static String user_id;
+    public static String user_name;
+    public static String group_id;
+    public static String referals;
+    public static String emp_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,30 +58,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter = new AlbumAdapter(this, albumList);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        user_name = settings.getString("user_name", "");
-        type = settings.getString("user_type", "");
+        String referal= getIntent().getStringExtra("Outside_referal");
+        shared_common_pref = new Shared_Common_Pref(MainActivity.this);
+        settings = getSharedPreferences(PREFS_NAME, 0);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+        }
+        settings = getSharedPreferences(PREFS_NAME, 0);
+        user_group_name = settings.getString("user_group_name", "");
         user_id = settings.getString("user_id", "");
-        user_main_id = settings.getString("base_id", "");
-        stu_cource_id = settings.getString("course_id", "");
-        stu_branch_id = settings.getString("branch_id", "");
-        stu_sem_id = settings.getString("student_semester_id", "");
-        stu_section = settings.getString("student_section", "");
-        stu_session_year = settings.getString("session_year", "");
-        user_logged_type = settings.getString("user_logged_type", "");
+        user_name = settings.getString("user_name", "");
+        group_id = settings.getString("group_id", "");
+        emp_id = settings.getString("emp_id", "");
+        referals = settings.getString("referals", referal);
 
-
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+      /*  RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
-        prepareAlbums();
-        /*if(settings.getString("user_type", "").toString().equals("admin")){
-
+        prepareAlbums();*/
+        if(settings.getString("user_group_name", "").toString().equals("admin")){
             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setAdapter(adapter);
             prepareAlbums();
-        }*/
+        }
     }
     private void prepareAlbums() {
         int[] covers = new int[]{

@@ -74,6 +74,7 @@ public class ExpenseReport extends Fragment {
         progressBar.setIndeterminateDrawable(doubleBounce);
 
         //setHasOptionsMenu(true);
+
         getServiceResponseData(date);
         rightimage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +83,8 @@ public class ExpenseReport extends Fragment {
                 ExpenseDateReport fragment = new ExpenseDateReport();
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
+                ft.setCustomAnimations(R.animator.fade_in,
+                        R.animator.fade_out);
                 ft.replace(R.id.frag_container, fragment);
                 ft.commit();
             }
@@ -89,24 +92,6 @@ public class ExpenseReport extends Fragment {
 
         return view;
     }
-
-   /* @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.calender:
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-  @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menusearch, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }*/
-
 
     private void getServiceResponseData(String Date) {
     progressBar.setVisibility(View.VISIBLE);

@@ -70,6 +70,8 @@ public class SaleReport extends Fragment {
                 SaleDateReport fragment = new SaleDateReport();
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
+                ft.setCustomAnimations(R.animator.fade_in,
+                        R.animator.fade_out);
                 ft.replace(R.id.frag_container, fragment);
                 ft.commit();
             }

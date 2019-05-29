@@ -19,6 +19,7 @@ public class Login extends AppCompatActivity {
     EditText Login,Passowrd;
     android.widget.Button Button;
     private ProgressDialog pDialog;
+    Shared_Common_Pref shared_common_pref;
 
     // private static final String TAG = "Loginact";
     public static final String PREFS_NAME = "LoginPrefs";
@@ -26,6 +27,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getWindow().setBackgroundDrawableResource(R.drawable.banner);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if (settings.getString("logged", "").toString().equals("logged")) {
@@ -38,21 +40,23 @@ public class Login extends AppCompatActivity {
         Button=findViewById(R.id.button);
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
+        shared_common_pref = new Shared_Common_Pref(Login.this);
         Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     if(Login.getText().toString().equals("admin") && Passowrd.getText().toString().equals("1234")) {
-                       /* SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putString("logged", "logged");
+                        editor.putString("user_group_name", "admin");
                         editor.putString("user_id", "1");
-                        editor.putString("user_name", "Jungle Cook");
-                        editor.putString("user_type", "admin");
-                        editor.commit();
-*/
-
+                        editor.putString("user_name", "admin");
+                        shared_common_pref.save(Shared_Common_Pref.userid,"1");
+                        editor.apply();
                         Intent intent = new Intent(Login.this, MainActivity.class);
+                        intent.putExtra("Outside_referal", "admin");
                         startActivity(intent);
+                        finish();
                     }
               //  getServiceResponseData();
             }

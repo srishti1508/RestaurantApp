@@ -1,6 +1,6 @@
 package tgs.com.restaurantapp;
 
-import android.app.ProgressDialog;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,17 +12,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.Wave;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,13 +27,11 @@ import tgs.com.restaurantapp.retrofit.InterfaceApi;
 
 public class ProductReport extends Fragment {
     RecyclerView recyclerView;
-
-    Button manageprofile, fee_structure, change_pwd;
     ImageView rightimage;
     ProgressBar progressBar;
-    TextView name, enroll_no;
+    TextView name;
     TableAdapter tableAdapter;
-    private List<TableModel> albumList;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,17 +54,16 @@ public class ProductReport extends Fragment {
                 ProductSearchingReport fragment = new ProductSearchingReport();
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
+                ft.setCustomAnimations(R.animator.fade_in,
+                        R.animator.fade_out);
                 ft.replace(R.id.frag_container, fragment);
                 ft.commit();
             }
         });
-
         return view;
     }
 
-
     private void getServiceResponseData() {
-
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
         Call<ProductModel> call = api.productwise_report("5199","");
         call.enqueue(new Callback<ProductModel>() {
@@ -81,27 +74,19 @@ public class ProductReport extends Fragment {
                 final ProductModel status = response.body();
 
                 if (status.getStatus().equals("1")) {
-
                     tableAdapter = new TableAdapter(getActivity(),status);
                     recyclerView.setAdapter(tableAdapter);
-
                 } else {
-
                     Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onFailure(Call<ProductModel> call, Throwable t) {
-
                 Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
-
             }
         });
     }
-
-
-
     private class TableAdapter extends RecyclerView.Adapter<TableAdapter.MyViewHolder>  {
         private Context mContext;
         private List<ProductModel.Response> albumList;
@@ -125,13 +110,10 @@ public class ProductReport extends Fragment {
             holder.Quantity.setText(table.getPro_quantity());
             holder.Rate.setText(table.getPro_price());
             holder.Cost.setText(table.getPro_total());
-
-
         }
 
         @Override
         public int getItemCount() {
-
             return albumList.size();
         }
 
