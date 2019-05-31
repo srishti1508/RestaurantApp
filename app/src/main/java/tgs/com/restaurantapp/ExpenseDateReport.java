@@ -46,7 +46,7 @@ public class ExpenseDateReport extends Fragment {
                         newDate.set(selectedyear, selectedmonth, selectedday);
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         date.setText(sdf.format(newDate.getTime()));
-                    }
+                        }
                 }, mYear, mMonth, mDay);
                 mDatePicker.getDatePicker().setCalendarViewShown(false);
                 mDatePicker.show();

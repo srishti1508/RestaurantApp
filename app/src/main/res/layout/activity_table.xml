@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/backgrounds"
+    android:background="@drawable/banner"
     >
     <ImageView
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:SpinKit_Color="@color/colorPrimary"
+        app:SpinKit_Color="@color/red"
         android:layout_marginTop="180dp"
        />
 

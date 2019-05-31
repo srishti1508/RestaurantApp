@@ -7,7 +7,9 @@ import retrofit2.http.POST;
 import tgs.com.restaurantapp.CustomerModel;
 import tgs.com.restaurantapp.ExpenseModel;
 import tgs.com.restaurantapp.LoginModel;
+import tgs.com.restaurantapp.MenuModel;
 import tgs.com.restaurantapp.ProductModel;
+import tgs.com.restaurantapp.ProfitModel;
 import tgs.com.restaurantapp.SaleModel;
 import tgs.com.restaurantapp.TableModel;
 
@@ -45,6 +47,21 @@ public interface InterfaceApi {
     Call<SaleModel> get_sale_report(@Field("KEY") String APIKEY, @Field("date") String date
 
     );
+
+    @POST("menu_report")
+    @FormUrlEncoded
+    Call<MenuModel> menu_report(@Field("KEY") String APIKEY, @Field("search") String date
+
+    );
+
+
+    @POST("profit_report")
+    @FormUrlEncoded
+    Call<ProfitModel> profit_report(@Field("KEY") String APIKEY
+
+    );
+
+
 
     @POST("expense_report")
     @FormUrlEncoded

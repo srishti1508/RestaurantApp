@@ -57,6 +57,8 @@ public class Login extends AppCompatActivity {
                         intent.putExtra("Outside_referal", "admin");
                         startActivity(intent);
                         finish();
+                    }else{
+                        Toast.makeText(Login.this, "Please Check Username and Password", Toast.LENGTH_SHORT).show();
                     }
               //  getServiceResponseData();
             }

@@ -50,7 +50,7 @@
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/edit"
+        android:background="@drawable/editview"
         android:layout_marginTop="50dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
@@ -72,13 +72,6 @@
         android:layout_marginTop="15dp"
         android:textColor="@color/white"/>
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </android.support.v7.widget.RecyclerView>
 
 
 

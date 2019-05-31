@@ -137,6 +137,18 @@ public class ExpenseModel {
         @Expose
         private String total_expense;
 
+        public String getExpense_note() {
+            return expense_note;
+        }
+
+        public void setExpense_note(String expense_note) {
+            this.expense_note = expense_note;
+        }
+
+        @SerializedName("expense_note")
+        @Expose
+        private String expense_note;
+
 
 
     }

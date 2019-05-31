@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
                     android:orientation="horizontal"
-                    android:weightSum="2"
+                    android:weightSum="3"
                     >
 
                     <TextView
@@ -75,6 +75,22 @@
                         />
 
                     <TextView
+                        android:id="@+id/reason"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text=" - "
+                        android:textStyle="bold"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="#343434"
+                        android:typeface="sans"
+                        />
+
+
+                    <TextView
                         android:id="@+id/category"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -87,21 +103,7 @@
                         android:textColor="#343434"
                         android:typeface="sans" />
 
-                    <TextView
 
-                        android:id="@+id/fact_logs_salaryday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="sans-serif-smallcaps"
-                        android:gravity="left"
-                        android:singleLine="true"
-                        android:text=" - "
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="#343434"
-                        android:typeface="sans"
-                        android:visibility="gone"
-                        />
 
                 </LinearLayout>
 

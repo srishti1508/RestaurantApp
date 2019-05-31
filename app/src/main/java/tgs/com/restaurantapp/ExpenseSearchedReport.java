@@ -39,9 +39,8 @@ public class ExpenseSearchedReport extends Fragment {
   ProgressBar progressBar;
     Button manageprofile, fee_structure, change_pwd;
     ImageView rightimage;
-    TextView name, activityName;
+    TextView name, activityName,nodata;
     String date="";
-
     TableAdapter tableAdapter;
     Dialog dialog;
     String month, SelectedYear;
@@ -57,6 +56,7 @@ public class ExpenseSearchedReport extends Fragment {
         recyclerView=view.findViewById(R.id.recycler_view);
         rightimage=view.findViewById(R.id.rightimage);
         activityName=view.findViewById(R.id.activityName);
+        nodata=view.findViewById(R.id.nodata);
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
@@ -102,8 +102,6 @@ public class ExpenseSearchedReport extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }*/
 
-
-
     private void getServiceResponseData(String Date) {
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
         Call<ExpenseModel> call = api.expense_report("5199",Date);
@@ -114,14 +112,19 @@ public class ExpenseSearchedReport extends Fragment {
                 recyclerView.setVisibility(View.VISIBLE);
                 final ExpenseModel status = response.body();
 
-                if (status.getStatus().equals("1")) {
-                    activityName.setText("Total Expense : " +status.getTotal_expense());
+                if (status.getResponse().size()>0) {
+                    if(status.getTotal_expense().equals("")){
+                        activityName.setText("Total Expense : 0");
+                    }else {
+                        activityName.setText("Total Expense : " + status.getTotal_expense());
+                    }
                     tableAdapter = new TableAdapter(getActivity(),status);
                     recyclerView.setAdapter(tableAdapter);
 
                 } else {
-
-                    Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
+                    recyclerView.setVisibility(View.GONE);
+                    nodata.setVisibility(View.VISIBLE);
+                    //Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -129,7 +132,6 @@ public class ExpenseSearchedReport extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
-
             }
         });
     }
@@ -154,6 +156,7 @@ public class ExpenseSearchedReport extends Fragment {
 
             holder.expense.setText(table.getExpense_on());
             holder.category.setText(table.getExp_category());
+            holder.reason.setText(table.getExpense_note());
             holder.Amount.setText(table.getAmount());
             holder.date.setText(table.getExp_date());
             holder.attachment.setOnClickListener(new View.OnClickListener() {
@@ -169,23 +172,22 @@ public class ExpenseSearchedReport extends Fragment {
                     ft.commit();
                 }
             });
-
         }
+
 
         @Override
         public int getItemCount() {
-
             return albumList.size();
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
-            TextView expense,category,Amount,date;
+            TextView expense,category,Amount,date,reason;
             ImageView attachment;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
-
                 expense=itemView.findViewById(R.id.expense);
+                reason=itemView.findViewById(R.id.reason);
                 category=itemView.findViewById(R.id.category);
                 Amount=itemView.findViewById(R.id.Amount);
                 date=itemView.findViewById(R.id.date);
@@ -193,6 +195,4 @@ public class ExpenseSearchedReport extends Fragment {
             }
         }
     }
-
-
 }

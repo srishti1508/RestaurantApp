@@ -36,7 +36,7 @@ public class SaleReport extends Fragment {
     ProgressBar progressBar;
     Button manageprofile, fee_structure, change_pwd;
     ImageView rightimage;
-    TextView name, activityName;
+    TextView name, activityName,nodata;
     String date="";
     TableAdapter tableAdapter;
     Dialog dialog;
@@ -53,6 +53,7 @@ public class SaleReport extends Fragment {
         recyclerView=view.findViewById(R.id.recycler_view);
         rightimage=view.findViewById(R.id.rightimage);
         activityName=view.findViewById(R.id.activityName);
+        nodata=view.findViewById(R.id.nodata);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -110,14 +111,15 @@ public class SaleReport extends Fragment {
               recyclerView.setVisibility(View.VISIBLE);
                 final SaleModel status = response.body();
 
-                if (status.getStatus().equals("1")) {
+                if (status.getResponse().size()>0) {
                     activityName.setText("Total Sale : " +status.getGrand_total());
                     tableAdapter = new TableAdapter(getActivity(),status);
                     recyclerView.setAdapter(tableAdapter);
 
                 } else {
-
-                    Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
+                    recyclerView.setVisibility(View.GONE);
+                    nodata.setVisibility(View.VISIBLE);
+                    //Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -149,10 +151,14 @@ public class SaleReport extends Fragment {
             final SaleModel.Response table = albumList.get(position);
 
             holder.subtotal.setText(table.getSubtotal());
-            holder.discount.setText(table.getDiscount());
             holder.total.setText(table.getTotal());
             holder.paid.setText(table.getStatus());
 
+            if(table.getDiscount().equals("")){
+                holder.discount.setText("-");
+            }else{
+                holder.discount.setText(table.getDiscount());
+            }
 
         }
 

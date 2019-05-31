@@ -36,7 +36,7 @@ public class SaleSearchedReport extends Fragment {
    ProgressBar progressBar;
     Button manageprofile, fee_structure, change_pwd;
     ImageView rightimage;
-    TextView name, activityName;
+    TextView name, activityName,nodata;
     String date="";
     TableAdapter tableAdapter;
     Dialog dialog;
@@ -53,6 +53,7 @@ public class SaleSearchedReport extends Fragment {
         recyclerView=view.findViewById(R.id.recycler_view);
         rightimage=view.findViewById(R.id.rightimage);
         activityName=view.findViewById(R.id.activityName);
+        nodata=view.findViewById(R.id.nodata);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -67,8 +68,7 @@ public class SaleSearchedReport extends Fragment {
         rightimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "HELLO", Toast.LENGTH_SHORT).show();
-                ExpenseDateReport fragment = new ExpenseDateReport();
+                SaleDateReport fragment = new SaleDateReport();
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.setCustomAnimations(R.animator.fade_in,
@@ -97,8 +97,6 @@ public class SaleSearchedReport extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }*/
 
-
-
     private void getServiceResponseData(String Date) {
 
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
@@ -110,14 +108,15 @@ public class SaleSearchedReport extends Fragment {
                recyclerView.setVisibility(View.VISIBLE);
                 final SaleModel status = response.body();
 
-                if (status.getStatus().equals("1")) {
+                if (status.getResponse().size()>0) {
                     activityName.setText("Total Sale : " +status.getGrand_total());
                     tableAdapter = new TableAdapter(getActivity(),status);
                     recyclerView.setAdapter(tableAdapter);
 
                 } else {
-
-                    Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
+                    recyclerView.setVisibility(View.GONE);
+                    nodata.setVisibility(View.VISIBLE);
+                    //Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -150,16 +149,18 @@ public class SaleSearchedReport extends Fragment {
 
 
             holder.subtotal.setText(table.getSubtotal());
-            holder.discount.setText(table.getDiscount());
             holder.total.setText(table.getTotal());
             holder.paid.setText(table.getStatus());
 
-
+            if(table.getDiscount().equals("")){
+                holder.discount.setText("-");
+            }else{
+                holder.discount.setText(table.getDiscount());
+            }
         }
 
         @Override
         public int getItemCount() {
-
             return albumList.size();
         }
 
@@ -169,7 +170,6 @@ public class SaleSearchedReport extends Fragment {
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
 
-
                 subtotal=itemView.findViewById(R.id.subtotal);
                 discount=itemView.findViewById(R.id.discount);
                 total=itemView.findViewById(R.id.total);
@@ -177,6 +177,5 @@ public class SaleSearchedReport extends Fragment {
             }
         }
     }
-
 
 }

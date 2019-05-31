@@ -27,31 +27,30 @@ public class Dashboard_Main extends AppCompatActivity {
             transaction.replace(R.id.frag_container, fragmentToReplace, TAG);
             transaction.commit();
         }
-
     }
     private Fragment getFragmentName(int position) {
         switch (position){
 
             case 0:
-                return new ExpenseReport();
+                return new ProfitReport();
             case 1:
-                return new SaleReport();
-            case 2:
-                return new Customer();
-            case 3:
-                return new Table();
-            case 4:
-                return new ProductReport();
-            case 5:
                 return new ExpenseReport();
+            case 2:
+                return new SaleReport();
+            case 3:
+                return new Customer();
+            case 4:
+                return new Table();
+            case 5:
+                return new ProductReport();
             case 6:
+                return new ExpenseReport();
+            case 7:
                 return new ExpenseReport();
 
             default:
                 return null;
 
         }
-
     }
-
 }

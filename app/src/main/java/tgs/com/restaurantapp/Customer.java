@@ -24,7 +24,7 @@ import tgs.com.restaurantapp.retrofit.InterfaceApi;
 public class Customer extends Fragment {
     RecyclerView recyclerView;
     ProgressBar progressBar;
-    TextView name;
+    TextView name,nodata;
     TableAdapter tableAdapter;
 
     @Override
@@ -33,6 +33,7 @@ public class Customer extends Fragment {
         View view = inflater.inflate(R.layout.activity_customer, container, false);
 
         recyclerView=view.findViewById(R.id.recycler_view);
+        nodata=view.findViewById(R.id.nodata);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -52,11 +53,13 @@ public class Customer extends Fragment {
              progressBar.setVisibility(View.GONE);
              recyclerView.setVisibility(View.VISIBLE);
                 final CustomerModel status = response.body();
-                if (status.getStatus().equals("1")) {
+                if (status.getResponse().size()>0) {
                     tableAdapter = new TableAdapter(getActivity(),status);
                     recyclerView.setAdapter(tableAdapter);
                 } else {
-                    Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
+                    nodata.setVisibility(View.VISIBLE);
+                   recyclerView.setVisibility(View.GONE);
+                    //Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
             @Override

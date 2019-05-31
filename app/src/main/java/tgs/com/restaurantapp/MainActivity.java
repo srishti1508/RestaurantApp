@@ -8,8 +8,11 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,6 +25,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.daimajia.slider.library.SliderLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +63,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter = new AlbumAdapter(this, albumList);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
+
+        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toolbar.setVisibility(View.GONE);
+                MenuList fragment = new MenuList();
+                FragmentManager fm = MainActivity.this.getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.setCustomAnimations(R.animator.fade_in,
+                        R.animator.fade_out);
+                ft.replace(R.id.frag_container, fragment);
+                ft.commit();
+            }
+        });
+
         String referal= getIntent().getStringExtra("Outside_referal");
         shared_common_pref = new Shared_Common_Pref(MainActivity.this);
         settings = getSharedPreferences(PREFS_NAME, 0);
@@ -86,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     private void prepareAlbums() {
         int[] covers = new int[]{
+                R.drawable.profits,
                 R.drawable.expense_report,
                 R.drawable.report,
                 R.drawable.rest_customer,
@@ -94,15 +116,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.drawable.menu,
                 R.drawable.restaurant,
         };
-        Album a = new Album("Expense Report", 13, covers[0]);
+        Album a = new Album("Profit Report", 13, covers[0]);
         albumList.add(a);
-        a = new Album("Sales Report", 11, covers[1]);
+        a = new Album("Expense Report", 11, covers[1]);
         albumList.add(a);
-        a= new Album("Customers", 11, covers[2]);
+        a = new Album("Sales Report", 11, covers[2]);
         albumList.add(a);
-        a = new Album("Tables", 12, covers[3]);
+        a= new Album("Customers", 11, covers[3]);
         albumList.add(a);
-        a= new Album("Product Report", 14, covers[4]);
+        a = new Album("Tables", 12, covers[4]);
+        albumList.add(a);
+        a= new Album("Product Report", 14, covers[5]);
         albumList.add(a);
        /* a = new Album("Events.", 14, covers[8]);
         albumList.add(a);*/
