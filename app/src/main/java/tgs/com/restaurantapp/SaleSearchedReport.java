@@ -1,7 +1,6 @@
 package tgs.com.restaurantapp;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,12 +18,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.Wave;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,7 +32,7 @@ public class SaleSearchedReport extends Fragment {
    ProgressBar progressBar;
     Button manageprofile, fee_structure, change_pwd;
     ImageView rightimage;
-    TextView name, activityName,nodata;
+    TextView name, activityName,nodata,dateshow;
     String date="";
     TableAdapter tableAdapter;
     Dialog dialog;
@@ -48,12 +44,15 @@ public class SaleSearchedReport extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_sale, container, false);
+        View view = inflater.inflate(R.layout.activity_salesearch, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         recyclerView=view.findViewById(R.id.recycler_view);
         rightimage=view.findViewById(R.id.rightimage);
         activityName=view.findViewById(R.id.activityName);
         nodata=view.findViewById(R.id.nodata);
+        dateshow=view.findViewById(R.id.dateshow);
+
+
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -64,6 +63,7 @@ public class SaleSearchedReport extends Fragment {
         Bundle bundle=getArguments();
         date=bundle.getString("Date");
         //setHasOptionsMenu(true);
+        dateshow.setText("Date: " +date);
         getServiceResponseData(date);
         rightimage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,26 +77,8 @@ public class SaleSearchedReport extends Fragment {
                 ft.commit();
             }
         });
-
         return view;
     }
-   /* @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.calender:
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-  @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menusearch, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }*/
-
     private void getServiceResponseData(String Date) {
 
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
@@ -109,22 +91,19 @@ public class SaleSearchedReport extends Fragment {
                 final SaleModel status = response.body();
 
                 if (status.getResponse().size()>0) {
-                    activityName.setText("Total Sale : " +status.getGrand_total());
+                    activityName.setText("Total Sale: " +status.getGrand_total());
                     tableAdapter = new TableAdapter(getActivity(),status);
                     recyclerView.setAdapter(tableAdapter);
 
                 } else {
                     recyclerView.setVisibility(View.GONE);
                     nodata.setVisibility(View.VISIBLE);
-                    //Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onFailure(Call<SaleModel> call, Throwable t) {
-
                 Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
-
             }
         });
     }
@@ -147,7 +126,6 @@ public class SaleSearchedReport extends Fragment {
         public void onBindViewHolder(@NonNull final TableAdapter.MyViewHolder holder, int position) {
             final SaleModel.Response table = albumList.get(position);
 
-
             holder.subtotal.setText(table.getSubtotal());
             holder.total.setText(table.getTotal());
             holder.paid.setText(table.getStatus());
@@ -158,11 +136,8 @@ public class SaleSearchedReport extends Fragment {
                 holder.discount.setText(table.getDiscount());
             }
         }
-
         @Override
-        public int getItemCount() {
-            return albumList.size();
-        }
+        public int getItemCount() { return albumList.size(); }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -177,5 +152,4 @@ public class SaleSearchedReport extends Fragment {
             }
         }
     }
-
 }

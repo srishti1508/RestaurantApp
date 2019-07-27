@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/banner"
+    android:background="@drawable/wallpaper2"
     >
     <ImageView
         android:layout_width="match_parent"
@@ -14,7 +14,8 @@
         android:textColor="@color/white"
         android:text=""
         android:textSize="15dp"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:visibility="gone"/>
 
     <com.github.ybq.android.spinkit.SpinKitView
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -26,8 +27,6 @@
         app:SpinKit_Color="@color/red"
         android:layout_marginTop="180dp"
        />
-
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

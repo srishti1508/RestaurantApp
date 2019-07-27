@@ -40,7 +40,7 @@ public class Customer extends Fragment {
         progressBar = view.findViewById(R.id.progress);
         Sprite doubleBounce = new Wave();
         progressBar.setIndeterminateDrawable(doubleBounce);
-        getServiceResponseData();
+       getServiceResponseData();
         return view;
     }
 
@@ -59,7 +59,6 @@ public class Customer extends Fragment {
                 } else {
                     nodata.setVisibility(View.VISIBLE);
                    recyclerView.setVisibility(View.GONE);
-                    //Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -77,10 +76,11 @@ public class Customer extends Fragment {
             this.mContext = mContext;
             this.albumList = albumList.getResponse();
         }
+
         @Override
         public TableAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.customer_single, parent, false);
+                    .inflate(R.layout.customer_single111, parent, false);
             return new TableAdapter.MyViewHolder(itemView);
         }
 

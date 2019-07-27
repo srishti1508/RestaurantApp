@@ -1,10 +1,12 @@
 package tgs.com.restaurantapp;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -26,13 +28,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import static tgs.com.restaurantapp.Login.PREFS_NAME;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,BaseSliderView.OnSliderClickListener {
     private RecyclerView recyclerView;
     DrawerLayout mDrawerLayout;
     NavigationView mNavigationView;
@@ -59,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupDeawer();
+        setupSlider();
         albumList = new ArrayList<>();
         adapter = new AlbumAdapter(this, albumList);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -68,14 +73,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toolbar.setVisibility(View.GONE);
-                MenuList fragment = new MenuList();
-                FragmentManager fm = MainActivity.this.getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.setCustomAnimations(R.animator.fade_in,
-                        R.animator.fade_out);
-                ft.replace(R.id.frag_container, fragment);
-                ft.commit();
+                vibrate();
+                Intent intent=new Intent(MainActivity.this,Menu_List.class);
+                startActivity(intent);
             }
         });
 
@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         shared_common_pref = new Shared_Common_Pref(MainActivity.this);
         settings = getSharedPreferences(PREFS_NAME, 0);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
         }
         settings = getSharedPreferences(PREFS_NAME, 0);
@@ -94,12 +93,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         emp_id = settings.getString("emp_id", "");
         referals = settings.getString("referals", referal);
 
-      /*  RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setAdapter(adapter);
-        prepareAlbums();*/
         if(settings.getString("user_group_name", "").toString().equals("admin")){
-            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setAdapter(adapter);
             prepareAlbums();
@@ -107,11 +102,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     private void prepareAlbums() {
         int[] covers = new int[]{
-                R.drawable.profits,
+                R.drawable.profitsimage,
                 R.drawable.expense_report,
                 R.drawable.report,
                 R.drawable.rest_customer,
-                R.drawable.tablechair,
+                R.drawable.dintable,
                 R.drawable.product_report,
                 R.drawable.menu,
                 R.drawable.restaurant,
@@ -128,8 +123,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         albumList.add(a);
         a= new Album("Product Report", 14, covers[5]);
         albumList.add(a);
-       /* a = new Album("Events.", 14, covers[8]);
-        albumList.add(a);*/
         adapter.notifyDataSetChanged();
     }
     private void setupDeawer() {
@@ -159,5 +152,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private void vibrate() {
+        Vibrator v = (Vibrator) MainActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(100); // 5000 miliseconds = 5 seconds
+
+    }
+
+
+    private void setupSlider() {
+        mDemoSlider = (SliderLayout) findViewById(R.id.slider);
+      /*  HashMap<String,String> url_maps = new HashMap<String, String>();
+        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
+        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
+        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
+        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");*/
+        HashMap<String, Integer> file_maps = new HashMap<String, Integer>();
+        file_maps.put("Hannibal", R.drawable.slide1);
+        file_maps.put("Big Bang Theory", R.drawable.slide1);
+        file_maps.put("House of Cards", R.drawable.slide2);
+        file_maps.put("Game of Thrones1", R.drawable.slide6);
+        file_maps.put("Game of Thrones", R.drawable.fooditem);
+        file_maps.put("Game of Thrones2", R.drawable.fooditem1);
+        file_maps.put("Game of Thrones3", R.drawable.download);
+        file_maps.put("Game of Thrones4", R.drawable.download2);
+
+
+        //file_maps.put("Big Bang ", R.drawable.banner);
+        for (String name : file_maps.keySet()) {
+            TextSliderViews textSliderView = new TextSliderViews(this);
+            // initialize a SliderLayout
+            textSliderView
+                    .description(name)
+                    .image(file_maps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                    .setOnSliderClickListener(this);
+            //add your extra information
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle()
+                    .putString("extra", name);
+            mDemoSlider.addSlider(textSliderView);
+        }
+        mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Default);
+        mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        //  mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+        mDemoSlider.setDuration(3000);
+    }
+
+
+    @Override
+    public void onSliderClick(BaseSliderView slider) {
+
     }
 }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="tgs.com.restaurantapp">
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+   <!-- <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -16,12 +16,36 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission
         android:name="android.permission.READ_PHONE_STATE"
+        tools:node="remove" />-->
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- Needed only if your app targets Android 5.0 (API level 21) or higher. -->
+    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+
+    <!--<uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
+   -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission
+        android:name="android.permission.READ_PHONE_STATE"
         tools:node="remove" />
+
 
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/jungle_book"
+        android:icon="@drawable/whiterose"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -35,6 +59,7 @@
         </activity>
         <activity android:name=".Login" />
         <activity android:name=".Dashboard_Main"></activity>
+        <activity android:name=".Menu_List"></activity>
     </application>
 
 </manifest>

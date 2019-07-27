@@ -1,7 +1,6 @@
 package tgs.com.restaurantapp;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,18 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.Circle;
-import com.github.ybq.android.spinkit.style.RotatingCircle;
 import com.github.ybq.android.spinkit.style.Wave;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,10 +31,9 @@ import tgs.com.restaurantapp.retrofit.InterfaceApi;
 
 public class ExpenseSearchedReport extends Fragment {
     RecyclerView recyclerView;
-  ProgressBar progressBar;
-    Button manageprofile, fee_structure, change_pwd;
+    ProgressBar progressBar;
     ImageView rightimage;
-    TextView name, activityName,nodata;
+    TextView name, activityName,nodata,dateshow;
     String date="";
     TableAdapter tableAdapter;
     Dialog dialog;
@@ -51,7 +45,7 @@ public class ExpenseSearchedReport extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_expense, container, false);
+        View view = inflater.inflate(R.layout.activity_expenseseached, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         recyclerView=view.findViewById(R.id.recycler_view);
         rightimage=view.findViewById(R.id.rightimage);
@@ -67,7 +61,7 @@ public class ExpenseSearchedReport extends Fragment {
 
         Bundle bundle=getArguments();
         date=bundle.getString("Date");
-        //setHasOptionsMenu(true);
+
         getServiceResponseData(date);
         rightimage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,26 +76,8 @@ public class ExpenseSearchedReport extends Fragment {
                 ft.commit();
             }
         });
-
         return view;
     }
-   /* @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.calender:
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-  @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menusearch, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }*/
-
     private void getServiceResponseData(String Date) {
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
         Call<ExpenseModel> call = api.expense_report("5199",Date);
@@ -120,11 +96,9 @@ public class ExpenseSearchedReport extends Fragment {
                     }
                     tableAdapter = new TableAdapter(getActivity(),status);
                     recyclerView.setAdapter(tableAdapter);
-
                 } else {
                     recyclerView.setVisibility(View.GONE);
                     nodata.setVisibility(View.VISIBLE);
-                    //Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -160,21 +134,19 @@ public class ExpenseSearchedReport extends Fragment {
             holder.Amount.setText(table.getAmount());
             holder.date.setText(table.getExp_date());
             holder.attachment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Attachment fragment = new Attachment();
-                    Bundle args = new Bundle();
-                    args.putString("url",table.getAttachment_url());
-                    fragment.setArguments(args);
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    FragmentTransaction ft = fm.beginTransaction();
-                    ft.replace(R.id.frag_container, fragment);
-                    ft.commit();
-                }
-            });
-        }
-
-
+            @Override
+            public void onClick(View v) {
+                Attachment fragment = new Attachment();
+                Bundle args = new Bundle();
+                args.putString("url",table.getAttachment_url());
+                fragment.setArguments(args);
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.frag_container, fragment);
+                ft.commit();
+            }
+        });
+    }
         @Override
         public int getItemCount() {
             return albumList.size();

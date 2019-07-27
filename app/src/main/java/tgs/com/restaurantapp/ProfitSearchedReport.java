@@ -18,12 +18,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.Wave;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,13 +56,10 @@ public class ProfitSearchedReport extends Fragment {
         Sprite doubleBounce = new Wave();
         progressBar.setIndeterminateDrawable(doubleBounce);
 
-
-        //setHasOptionsMenu(true);
         getServiceResponseData(date);
         rightimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 ProfitSearchReport fragment = new ProfitSearchReport();
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
@@ -75,31 +69,10 @@ public class ProfitSearchedReport extends Fragment {
                 ft.commit();
             }
         });
-
         return view;
     }
 
-   /* @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.calender:
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-  @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menusearch, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }*/
-
-
-
     private void getServiceResponseData(String Date) {
-
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
         Call<SaleModel> call = api.get_sale_report("5199",Date);
         call.enqueue(new Callback<SaleModel>() {
@@ -113,18 +86,14 @@ public class ProfitSearchedReport extends Fragment {
                     activityName.setText("Total Sale : " +status.getGrand_total());
                     tableAdapter = new TableAdapter(getActivity(),status);
                     recyclerView.setAdapter(tableAdapter);
-
                 } else {
-
                     Toast.makeText(getActivity(), ""+status.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onFailure(Call<SaleModel> call, Throwable t) {
-
                 Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
-
             }
         });
     }
@@ -151,18 +120,12 @@ public class ProfitSearchedReport extends Fragment {
             holder.discount.setText(table.getDiscount());
             holder.total.setText(table.getTotal());
             holder.paid.setText(table.getStatus());
-
-
         }
 
         @Override
-        public int getItemCount() {
-
-            return albumList.size();
-        }
+        public int getItemCount() { return albumList.size(); }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-
             TextView subtotal,discount,total,paid;
 
             public MyViewHolder(@NonNull View itemView) {
@@ -172,9 +135,7 @@ public class ProfitSearchedReport extends Fragment {
                 discount=itemView.findViewById(R.id.discount);
                 total=itemView.findViewById(R.id.total);
                 paid=itemView.findViewById(R.id.paid);
-
             }
         }
     }
-
 }
