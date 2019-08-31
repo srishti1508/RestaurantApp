@@ -149,10 +149,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent i = new Intent(MainActivity.this, Login.class);
             startActivity(i);
             finish();
+        }else if(id == R.id.profits){
+
+            Intent intent = new Intent(MainActivity.this, Dashboard_Main.class);
+            intent.putExtra("position", 0);
+            startActivity(intent);
+
+        }else if(id == R.id.Expense){
+
+            Intent intent = new Intent(MainActivity.this, Dashboard_Main.class);
+            intent.putExtra("position", 1);
+            startActivity(intent);
+
+        }else if(id == R.id.Sale){
+
+            Intent intent = new Intent(MainActivity.this, Dashboard_Main.class);
+            intent.putExtra("position", 2);
+            startActivity(intent);
+
+        }else if(id == R.id.Menu){
+
+            Intent intent = new Intent(MainActivity.this, Menu_List.class);
+            startActivity(intent);
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
     private void vibrate() {
         Vibrator v = (Vibrator) MainActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(100); // 5000 miliseconds = 5 seconds

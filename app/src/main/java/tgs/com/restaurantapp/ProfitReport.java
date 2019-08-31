@@ -97,8 +97,6 @@ public class ProfitReport extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }*/
 
-
-
     private void getServiceResponseData() {
 
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
@@ -153,7 +151,6 @@ public class ProfitReport extends Fragment {
             }else{
                 holder.image.setImageResource(R.drawable.profitsimage);
             }
-
 
         }
 

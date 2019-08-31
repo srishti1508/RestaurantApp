@@ -8,13 +8,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-
-
     >
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/backpic1">
+        android:background="#c6c4c4">
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_pic"
             android:layout_width="100dp"

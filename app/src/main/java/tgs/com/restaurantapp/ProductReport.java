@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.Wave;
 import com.twotoasters.jazzylistview.recyclerview.JazzyRecyclerViewScrollListener;
-
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;

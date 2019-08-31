@@ -9,7 +9,7 @@
     android:layout_marginTop="15dp"
     android:foreground="?selectableItemBackground"
     android:visibility="visible"
-    card_view:cardBackgroundColor="#e9e6e6"
+    card_view:cardBackgroundColor="#e9e6e"
     card_view:cardCornerRadius="8dp"
     card_view:cardElevation="2dp"
     >
